@@ -58,5 +58,10 @@ class RegisterBookWindow(tk.Toplevel):
             messagebox.showerror("Error", "El libro con el codigo ISBN ya existe")
         else:
             self.data_manager.add_book(title, author, isbn)
+            # Log activity
+            try:
+                self.data_manager.add_log(f"Book registered: {title} (ISBN: {isbn})")
+            except Exception:
+                pass
             messagebox.showinfo("Success", "El libro fue registrado satisfactoriamente")
             self.destroy()

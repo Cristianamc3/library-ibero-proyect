@@ -52,5 +52,10 @@ class RegisterUserWindow(tk.Toplevel):
             messagebox.showerror("Error", "Ya existe un un usuario registrado con ese ID")
         else:
             self.data_manager.add_user(name, user_id)
+            # Log activity
+            try:
+                self.data_manager.add_log(f"User registered: {name} (ID: {user_id})")
+            except Exception:
+                pass
             messagebox.showinfo("Success", "Se registro satisfactoriamente el usuario")
             self.destroy()

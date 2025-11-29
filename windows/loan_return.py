@@ -42,9 +42,15 @@ class LoansWindow(tk.Toplevel):
         Loans a book to a user if available.
         """
         isbn = self.entry_book_id.get()
+        user_id = self.entry_user_id.get()
 
         success = self.data_manager.loan_book(isbn)
         if success:
+            # Log activity (minimal)
+            try:
+                self.data_manager.add_log(f"Book loaned: ISBN {isbn} to User {user_id}")
+            except Exception:
+                pass
             messagebox.showinfo("Success", "Se realizo el prestamo correctamente")
         else:
             messagebox.showerror("Error", "No encotramos el libro, puede estar ya en solicitud de prestamo")
@@ -56,8 +62,11 @@ class LoansWindow(tk.Toplevel):
         """
         user_id = self.entry_user_id.get()
         book_id = self.entry_book_id.get()
-
         if self.data_manager.return_book(user_id, book_id):
+            try:
+                self.data_manager.add_log(f"Book returned: ISBN {book_id} by User {user_id}")
+            except Exception:
+                pass
             messagebox.showinfo("Success", "Se relizado entrega del libro")
         else:
             messagebox.showerror("Error", "No se ha encontrado prestamos a tu nombre de id, revisa que los campos correspondan")

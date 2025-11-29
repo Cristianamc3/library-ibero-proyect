@@ -17,6 +17,7 @@ class DataManager:
         self.books = []
         self.users = []
         self.loans = []
+        self.activity_log = []
         self.load_default_books()
 
     # === BOOK METHODS ===
@@ -26,6 +27,12 @@ class DataManager:
         """
         book = Book(title, author, isbn)
         self.books.append(book)
+
+    def add_log(self, message: str):
+        """
+        Adds a message to the in-memory activity log.
+        """
+        self.activity_log.append(message)
 
     def find_book_by_isbn(self, isbn):
         """
