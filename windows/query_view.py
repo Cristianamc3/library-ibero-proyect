@@ -31,6 +31,11 @@ class QueryWindow(tk.Toplevel):
         # === Layout ===
         self.label_options.pack(pady=5)
         self.combo_options.pack(pady=5)
+        # Filter input
+        self.label_filter = tk.Label(self, text="Filter:")
+        self.entry_filter = tk.Entry(self)
+        self.label_filter.pack(pady=(5, 0))
+        self.entry_filter.pack(pady=2)
         self.button_show.pack(pady=10)
         self.text_area.pack(pady=5)
 
@@ -38,21 +43,50 @@ class QueryWindow(tk.Toplevel):
         selected_option = self.combo_options.get()
         self.text_area.delete("1.0", tk.END)
 
+        # prepare filter
+        query = self.entry_filter.get().strip().lower()
+
         if selected_option == "libros":
             books = self.data_manager.books
+            results = []
             for book in books:
-                status = "Loaned" if book.is_loaned else "Available"
-                self.text_area.insert(tk.END, f"ISBN: {book.isbn}, Title: {book.title}, Status: {status}\n")
+                hay = False
+                if not query:
+                    hay = True
+                else:
+                    if query in (book.title or "").lower() or query in (book.author or "").lower() or query in (str(book.isbn) or "").lower():
+                        hay = True
+                if hay:
+                    status = "Loaned" if book.is_loaned else "Available"
+                    results.append(f"ISBN: {book.isbn}, Title: {book.title}, Status: {status}\n")
+            if results:
+                for line in results:
+                    self.text_area.insert(tk.END, line)
+            else:
+                self.text_area.insert(tk.END, "No results found.\n")
 
         elif selected_option == "Usuarios":
             users = self.data_manager.users
+            results = []
             for user in users:
-                self.text_area.insert(tk.END, f"ID: {user.user_id}, Name: {user.name}\n")
+                if not query or query in (user.name or "").lower() or query in str(user.user_id).lower():
+                    results.append(f"ID: {user.user_id}, Name: {user.name}\n")
+            if results:
+                for line in results:
+                    self.text_area.insert(tk.END, line)
+            else:
+                self.text_area.insert(tk.END, "No results found.\n")
 
         elif selected_option == "Prestamos":
             loaned_books = self.data_manager.get_loaned_books()
-            if loaned_books:
-                for book in loaned_books:
-                    self.text_area.insert(tk.END, f"ISBN: {book.isbn}, Title: {book.title}, Status: Loaned\n")
+            results = []
+            for book in loaned_books:
+                if not query or query in (book.title or "").lower() or query in str(book.isbn).lower():
+                    results.append(f"ISBN: {book.isbn}, Title: {book.title}, Status: Loaned\n")
+            if results:
+                for line in results:
+                    self.text_area.insert(tk.END, line)
+            else:
+                self.text_area.insert(tk.END, "No results found.\n")
         else:
-            self.text_area.insert(tk.END, "No books are currently loaned.\n")
+            self.text_area.insert(tk.END, "No results found.\n")
