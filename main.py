@@ -6,6 +6,8 @@ from windows.book_registration import RegisterBookWindow
 from windows.user_registration import RegisterUserWindow
 from windows.loan_return import LoansWindow
 from windows.query_view import QueryWindow
+from utils.utils import BACKGROUND_COLOR, FONT_TITLE, FONT_NORMAL, BUTTON_COLOR, BUTTON_TEXT_COLOR, PADDING
+
 
 class LibraryApp(tk.Tk):
     """
@@ -14,31 +16,77 @@ class LibraryApp(tk.Tk):
 
     def __init__(self):
         super().__init__()
-        self.title("Biblioteca Julio Mario Santo Domingo")
-        self.geometry("400x350")
-        self.configure(bg="#b5caff")
+        self.title("Library Management System")
+        self.geometry("500x350")
+        self.configure(bg=BACKGROUND_COLOR)
 
         # Initialize the data manager
         self.data_manager = DataManager()
 
         # === Title Label ===
-        self.label_title = tk.Label(self, text="Julio Mario Santo Domingo", font=("Arial", 16))
-        self.label_title.configure(bg="#b5caff")
-        self.label_title.pack(pady=20)
+        self.label_title = tk.Label(self, text="Library System", bg=BACKGROUND_COLOR, font=FONT_TITLE)
+        self.label_title.pack(pady=15)
 
         # === Buttons ===
-        self.btn_register_book = tk.Button(self, text="Registar Libro", width=30, command=self.open_register_book)
-        self.btn_register_user = tk.Button(self, text="Registrar Usuario", width=30, command=self.open_register_user)
-        self.btn_loan = tk.Button(self, text="Prestamo/Devolución libro", width=30, command=self.open_loan)
-        self.btn_query = tk.Button(self, text="Consultas", width=30, command=self.open_query)
-        self.btn_exit = tk.Button(self, text="Salida", width=30, command=self.quit)
+        self.btn_register_book = tk.Button(
+            self,
+            text="Register Book",
+            command=self.open_register_book,
+            bg=BUTTON_COLOR,
+            fg=BUTTON_TEXT_COLOR,
+            font=FONT_NORMAL,
+            padx=20,
+            pady=5
+        )
+        self.btn_register_book.pack(pady=PADDING)
 
-        # === Layout ===
-        self.btn_register_book.pack(pady=5)
-        self.btn_register_user.pack(pady=5)
-        self.btn_loan.pack(pady=5)
-        self.btn_query.pack(pady=5)
-        self.btn_exit.pack(pady=20)
+        self.btn_register_user = tk.Button(
+            self,
+            text="Register User",
+            command=self.open_register_user,
+            bg=BUTTON_COLOR,
+            fg=BUTTON_TEXT_COLOR,
+            font=FONT_NORMAL,
+            padx=20,
+            pady=5
+        )
+        self.btn_register_user.pack(pady=PADDING)
+
+        self.btn_loan = tk.Button(
+            self,
+            text="Loans & Returns",
+            command=self.open_loan,
+            bg=BUTTON_COLOR,
+            fg=BUTTON_TEXT_COLOR,
+            font=FONT_NORMAL,
+            padx=20,
+            pady=5
+        )
+        self.btn_loan.pack(pady=PADDING)
+
+        self.btn_query = tk.Button(
+            self,
+            text="Query Data",
+            command=self.open_query,
+            bg=BUTTON_COLOR,
+            fg=BUTTON_TEXT_COLOR,
+            font=FONT_NORMAL,
+            padx=20,
+            pady=5
+        )
+        self.btn_query.pack(pady=PADDING)
+
+        self.btn_exit = tk.Button(
+            self,
+            text="Exit",
+            command=self.quit,
+            bg=BUTTON_COLOR,
+            fg=BUTTON_TEXT_COLOR,
+            font=FONT_NORMAL,
+            padx=20,
+            pady=5
+        )
+        self.btn_exit.pack(pady=PADDING)
 
     # === Navigation Methods ===
 
