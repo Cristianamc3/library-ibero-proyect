@@ -2,6 +2,7 @@
 
 import tkinter as tk
 from tkinter import messagebox
+from utils.utils import validate_empty
 
 class RegisterUserWindow(tk.Toplevel):
     """
@@ -42,12 +43,14 @@ class RegisterUserWindow(tk.Toplevel):
         name = self.entry_name.get()
         user_id = self.entry_id.get()
 
-        if name and user_id:
-            if self.data_manager.find_user_by_id(user_id):
-                messagebox.showerror("Error", "Ya existe un un usuario registrado con ese ID")
-            else:
-                self.data_manager.add_user(name, user_id)
-                messagebox.showinfo("Success", "Se registro satisfactoriamente el usuario")
-                self.destroy()
+        is_valid, msg = validate_empty({"Name": name, "ID": user_id})
+        if not is_valid:
+            messagebox.showerror("Validation Error", msg)
+            return
+
+        if self.data_manager.find_user_by_id(user_id):
+            messagebox.showerror("Error", "Ya existe un un usuario registrado con ese ID")
         else:
-            messagebox.showwarning("Missing data", "Por favor rellena todos los campos")
+            self.data_manager.add_user(name, user_id)
+            messagebox.showinfo("Success", "Se registro satisfactoriamente el usuario")
+            self.destroy()
