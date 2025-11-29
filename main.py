@@ -6,6 +6,7 @@ from windows.book_registration import RegisterBookWindow
 from windows.user_registration import RegisterUserWindow
 from windows.loan_return import LoansWindow
 from windows.query_view import QueryWindow
+from windows.activity_log import ActivityLogWindow
 from utils.utils import BACKGROUND_COLOR, FONT_TITLE, FONT_NORMAL, BUTTON_COLOR, BUTTON_TEXT_COLOR, PADDING
 
 
@@ -76,6 +77,18 @@ class LibraryApp(tk.Tk):
         )
         self.btn_query.pack(pady=PADDING)
 
+        self.btn_activity_log = tk.Button(
+            self,
+            text="Activity Log",
+            command=self.open_activity_log,
+            bg=BUTTON_COLOR,
+            fg=BUTTON_TEXT_COLOR,
+            font=FONT_NORMAL,
+            padx=20,
+            pady=5
+        )
+        self.btn_activity_log.pack(pady=PADDING)
+
         self.btn_exit = tk.Button(
             self,
             text="Exit",
@@ -101,6 +114,9 @@ class LibraryApp(tk.Tk):
 
     def open_query(self):
         QueryWindow(self, self.data_manager)
+
+    def open_activity_log(self):
+        ActivityLogWindow(self, self.data_manager)
 
 
 if __name__ == "__main__":
