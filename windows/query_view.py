@@ -36,6 +36,10 @@ class QueryWindow(tk.Toplevel):
         self.entry_filter = tk.Entry(self)
         self.label_filter.pack(pady=(5, 0))
         self.entry_filter.pack(pady=2)
+        # Available only checkbox (applies to Books)
+        self.available_only_var = tk.BooleanVar(value=False)
+        self.check_available = tk.Checkbutton(self, text="Available Only", variable=self.available_only_var)
+        self.check_available.pack(pady=(2, 5))
         self.button_show.pack(pady=10)
         self.text_area.pack(pady=5)
 
@@ -50,6 +54,9 @@ class QueryWindow(tk.Toplevel):
             books = self.data_manager.books
             results = []
             for book in books:
+                # If 'Available Only' is checked, skip loaned books
+                if self.available_only_var.get() and book.is_loaned:
+                    continue
                 hay = False
                 if not query:
                     hay = True
