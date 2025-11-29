@@ -2,6 +2,7 @@
 
 import tkinter as tk
 from tkinter import messagebox
+from utils.utils import validate_empty
 
 class RegisterBookWindow(tk.Toplevel):
     """
@@ -48,12 +49,14 @@ class RegisterBookWindow(tk.Toplevel):
         author = self.entry_author.get()
         isbn = self.entry_isbn.get()
 
-        if title and author and isbn:
-            if self.data_manager.find_book_by_isbn(isbn):
-                messagebox.showerror("Error", "El libro con el codigo ISBN ya existe")
-            else:
-                self.data_manager.add_book(title, author, isbn)
-                messagebox.showinfo("Success", "El libro fue registrado satisfactoriamente")
-                self.destroy()
+        is_valid, msg = validate_empty({"Title": title, "Author": author, "ISBN": isbn})
+        if not is_valid:
+            messagebox.showerror("Validation Error", msg)
+            return
+
+        if self.data_manager.find_book_by_isbn(isbn):
+            messagebox.showerror("Error", "El libro con el codigo ISBN ya existe")
         else:
-            messagebox.showwarning("Missing data", "Por favor rellena todos los campos del formulario")
+            self.data_manager.add_book(title, author, isbn)
+            messagebox.showinfo("Success", "El libro fue registrado satisfactoriamente")
+            self.destroy()
